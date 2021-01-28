@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using IPG_v2._0.Models;
 
 namespace IPG_v2._0
 {
@@ -34,6 +35,8 @@ namespace IPG_v2._0
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
+            services.AddDbContext<ProjetosDbContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("ProjetosDdContext")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
