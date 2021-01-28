@@ -1,15 +1,15 @@
-﻿@model IEnumerable<IPG_v2._0.Models.Projetos>
+﻿@model IEnumerable<Projetos>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Portfolio</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-success">Create New Project</a>
 </p>
-<table class="table">
+<table class="table table-dark">
     <thead>
         <tr>
             <th>
@@ -22,19 +22,19 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var projetos in Model)
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Nome)
+                    @Html.DisplayFor(modelItem => projetos.Nome)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Descricao)
+                    @Html.DisplayFor(modelItem => projetos.Descricao)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.ProjetoId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.ProjetoId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.ProjetoId">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@projetos.ProjetoId" class="btn btn-warning">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@projetos.ProjetoId" class="btn btn-info">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@projetos.ProjetoId" class="btn btn-danger">Delete</a>
                 </td>
             </tr>
         }
