@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using IPG_v2._0.Models;
 using IPG_v2._0.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace IPG_v2._0.Controllers
 {
@@ -51,11 +53,20 @@ namespace IPG_v2._0.Controllers
         // POST: Projetos/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProdutoId,Nome,Descricao")] Projetos projetos)
+        public async Task<IActionResult> Create([Bind("ProdutoId,Nome,Descricao")] Projetos projetos, IFormFile ficheiroFoto)
         {
             if (!ModelState.IsValid)
             {
                return View(projetos);
+            }
+
+            if (ficheiroFoto != null && ficheiroFoto.Length > 0)
+            {
+                using (var ficheiroMemoria = new MemoryStream())
+                {
+                    ficheiroFoto.CopyTo(ficheiroMemoria);
+                    projetos.Foto = ficheiroMemoria.ToArray();
+                }
             }
             _db.Add(projetos);
             await _db.SaveChangesAsync();

@@ -36,7 +36,7 @@ namespace IPG_v2._0
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddDbContext<ProjetosDbContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("ProjetosDdContext")));
+                    options.UseSqlServer(Configuration.GetConnectionString("ProjetosDbContext")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

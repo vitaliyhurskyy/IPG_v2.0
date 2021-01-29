@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace IPG_v2._0.Migrations
 {
-    public partial class AddProjetosToDb : Migration
+    public partial class UpdateProjetosInDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,8 +13,9 @@ namespace IPG_v2._0.Migrations
                 {
                     ProjetoId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Nome = table.Column<string>(nullable: false),
-                    Descricao = table.Column<string>(nullable: false)
+                    Nome = table.Column<string>(maxLength: 20, nullable: false),
+                    Descricao = table.Column<string>(maxLength: 200, nullable: false),
+                    Foto = table.Column<byte[]>(nullable: false)
                 },
                 constraints: table =>
                 {
