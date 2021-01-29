@@ -11,20 +11,20 @@ namespace IPG_v2._0.Controllers
 {
     public class ProjetosController : Controller
     {
-        private readonly ProjetosDbContext _context;
+        private readonly ProjetosDbContext _db;
 
         public ProjetosController(ProjetosDbContext context)
         {
-            _context = context;
+            _db = context;
         }
 
-        // GET: Produtos
+        // GET: Projetos
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Projetos.ToListAsync());
+            return View(await _db.Projetos.ToListAsync());
         }
 
-        // GET: Produtos/Details/5
+        // GET: Projetos/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -32,39 +32,39 @@ namespace IPG_v2._0.Controllers
                 return NotFound();
             }
 
-            var produto = await _context.Projetos
-                .FirstOrDefaultAsync(m => m.ProjetoId == id);
+            var produto = await _db.Projetos
+                .SingleOrDefaultAsync(m => m.ProjetoId == id);
             if (produto == null)
             {
-                return NotFound();
+                return View("Missing");
             }
 
             return View(produto);
         }
 
-        // GET: Produtos/Create
+        // GET: Projetos/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Produtos/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Projetos/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ProdutoId,Nome,Descricao")] Projetos projetos)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _context.Add(projetos);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+               return View(projetos);
             }
-            return View(projetos);
+            _db.Add(projetos);
+            await _db.SaveChangesAsync();
+
+            ViewBag.Mensagem = "Projeto adicionado com sucesso.";
+            return View("Success");
         }
 
-        // GET: Produtos/Edit/5
+        // GET: Projetos/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -72,50 +72,52 @@ namespace IPG_v2._0.Controllers
                 return NotFound();
             }
 
-            var produto = await _context.Projetos.FindAsync(id);
-            if (produto == null)
+            var projetos = await _db.Projetos.FindAsync(id);
+            if (projetos == null)
             {
-                return NotFound();
+                return View("Missing");
             }
-            return View(produto);
+            return View(projetos);
         }
 
         // POST: Produtos/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProdutoId,Nome,Descricao")] Projetos projetos)
+        public async Task<IActionResult> Edit(int id, [Bind("ProjetoId,Nome,Descricao")] Projetos projetos)
         {
             if (id != projetos.ProjetoId)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(projetos);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProdutoExists(projetos.ProjetoId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                return View(projetos);
             }
-            return View(projetos);
+            try
+            {
+                _db.Update(projetos);
+                await _db.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ProjetosExist(projetos.ProjetoId))
+                {
+                    return View("DeleteInsert");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Ocorreu um erro. Não foi possível guardar o produto. Tente novamente e se o problema persistir contacte a assistência.");
+                    return View(projetos);
+                }
+            }
+            ViewBag.Mensagem = "Projeto alterado com sucesso";
+            return View("Success");
         }
+           
+        
 
-        // GET: Produtos/Delete/5
+        // GET: Projetos/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -123,30 +125,35 @@ namespace IPG_v2._0.Controllers
                 return NotFound();
             }
 
-            var produto = await _context.Projetos
-                .FirstOrDefaultAsync(m => m.ProjetoId == id);
+            var produto = await _db.Projetos
+                .SingleOrDefaultAsync(m => m.ProjetoId == id);
             if (produto == null)
             {
-                return NotFound();
+                ViewBag.Mensagem = "O produto que estava a tentar apagar foi eliminado por outra pessoa.";
+                return View("Success");
             }
 
             return View();
         }
 
-        // POST: Produtos/Delete/5
+        // POST: Projetos/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var produto = await _context.Projetos.FindAsync(id);
-            _context.Projetos.Remove(produto);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            var projetos = await _db.Projetos.FindAsync(id);
+            _db.Projetos.Remove(projetos);
+            await _db.SaveChangesAsync();
+
+            ViewBag.Mensagem = "O produto foi eliminado com sucesso";
+            return View("Success");
         }
 
-        private bool ProdutoExists(int id)
+        private bool ProjetosExist(int id)
         {
-            return _context.Projetos.Any(e => e.ProjetoId == id);
+            return _db.Projetos.Any(p => p.ProjetoId == id);
         }
+
+      
     }
 }

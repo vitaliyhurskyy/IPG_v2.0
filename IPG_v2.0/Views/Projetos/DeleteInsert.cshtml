@@ -1,13 +1,14 @@
-﻿@model IPG_v2._0.Models.Projetos
+﻿@model Projetos
 
-@{
-    ViewData["Title"] = "Create";
-}
+@{ ViewData["Title"] = "Projeto eliminado"; }
 
-<h1>Create</h1>
+<div class="card text-white bg-danger mb-3">
+    <div class="card-body">
+        <h5 class="card-title">Atenção</h5>
+        <p class="card-text">O projeto que estava a editar foi eliminado.</p>
+    </div>
+</div>
 
-<h4>Projeto</h4>
-<hr />
 <div class="row">
     <div class="col-md-8">
         <form asp-action="Create">
@@ -23,13 +24,12 @@
                 <span asp-validation-for="Descricao" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                <input type="submit" value="Adicionar" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-danger">Descartar</a>
             </div>
         </form>
     </div>
 </div>
-
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
