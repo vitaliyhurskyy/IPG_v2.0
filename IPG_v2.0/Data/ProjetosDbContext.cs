@@ -26,5 +26,6 @@ namespace IPG_v2._0.Data
 
         public DbSet<IPG_v2._0.Models.Projetos> Projetos { get; set; }
         public DbSet<IPG_v2._0.Models.Categorias> Categorias { get; set; }
+        public DbSet<IPG_v2._0.Models.Clientes> Clientes { get; set; }
     }
 }

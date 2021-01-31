@@ -8,6 +8,7 @@ using IPG_v2._0.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace IPG_v2._0.Controllers
 {
@@ -21,9 +22,29 @@ namespace IPG_v2._0.Controllers
         }
 
         // GET: Projetos
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string nomePesquisar, int pagina = 1)
         {
-            return View(await _db.Projetos.ToListAsync());
+            Paginacao paginacao = new Paginacao
+            {
+                TotalItems = await _db.Projetos.Where(p => nomePesquisar == null || p.Nome.Contains(nomePesquisar)).CountAsync(),
+                PaginaAtual = pagina
+            };
+
+            List<Projetos> projetos = await _db.Projetos.Where(p => nomePesquisar == null || p.Nome.Contains(nomePesquisar))
+                .Include(p => p.Categoria)
+                .OrderBy(p => p.Nome)
+                .Skip(paginacao.ItemsPorPagina * (pagina - 1))
+                .Take(paginacao.ItemsPorPagina)
+                .ToListAsync();
+
+            ListaProjetosViewModel modelo = new ListaProjetosViewModel
+            {
+                Paginacao = paginacao,
+                Projetos = projetos,
+                NomePesquisar = nomePesquisar
+            };
+
+            return base.View(modelo);
         }
 
         // GET: Projetos/Details/5
@@ -34,32 +55,45 @@ namespace IPG_v2._0.Controllers
                 return NotFound();
             }
 
-            var produto = await _db.Projetos
+            var projetos = await _db.Projetos.Include(p => p.Categoria)
                 .SingleOrDefaultAsync(m => m.ProjetoId == id);
-            if (produto == null)
+            if (projetos == null)
             {
                 return View("Missing");
             }
 
-            return View(produto);
+            return View(projetos);
         }
 
         // GET: Projetos/Create
         public IActionResult Create()
         {
+            ViewData["CategoriaId"] = new SelectList(_db.Categorias, "CategoriaId", "Nome");
             return View();
         }
 
         // POST: Projetos/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProdutoId,Nome,Descricao")] Projetos projetos, IFormFile ficheiroFoto)
+        public async Task<IActionResult> Create([Bind("ProdutoId,Nome,Descricao,CategoriaId")] Projetos projetos, IFormFile ficheiroFoto)
         {
             if (!ModelState.IsValid)
             {
-               return View(projetos);
+                ViewData["CategoriaId"] = new SelectList(_db.Categorias, "CategoriaId", "Nome");
+                return View(projetos);
             }
 
+            AtualizaFotoProjeto(projetos, ficheiroFoto);
+
+            _db.Add(projetos);
+            await _db.SaveChangesAsync();
+
+            ViewBag.Mensagem = "Projeto adicionado com sucesso.";
+            return View("Success");
+        }
+
+        private static void AtualizaFotoProjeto(Projetos projetos, IFormFile ficheiroFoto)
+        {
             if (ficheiroFoto != null && ficheiroFoto.Length > 0)
             {
                 using (var ficheiroMemoria = new MemoryStream())
@@ -68,11 +102,6 @@ namespace IPG_v2._0.Controllers
                     projetos.Foto = ficheiroMemoria.ToArray();
                 }
             }
-            _db.Add(projetos);
-            await _db.SaveChangesAsync();
-
-            ViewBag.Mensagem = "Projeto adicionado com sucesso.";
-            return View("Success");
         }
 
         // GET: Projetos/Edit/5
@@ -88,13 +117,15 @@ namespace IPG_v2._0.Controllers
             {
                 return View("Missing");
             }
+
+            ViewData["CategoriaId"] = new SelectList(_db.Categorias, "CategoriaId", "Nome");
             return View(projetos);
         }
 
         // POST: Produtos/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProjetoId,Nome,Descricao")] Projetos projetos)
+        public async Task<IActionResult> Edit(int id, [Bind("ProjetoId,Nome,Descricao,Foto,CategoriaId")] Projetos projetos, IFormFile ficheiroFoto)
         {
             if (id != projetos.ProjetoId)
             {
@@ -103,10 +134,12 @@ namespace IPG_v2._0.Controllers
 
             if (!ModelState.IsValid)
             {
+                ViewData["CategoriaId"] = new SelectList(_db.Categorias, "CategoriaId", "Nome");
                 return View(projetos);
             }
             try
             {
+                AtualizaFotoProjeto(projetos, ficheiroFoto);
                 _db.Update(projetos);
                 await _db.SaveChangesAsync();
             }
@@ -114,7 +147,7 @@ namespace IPG_v2._0.Controllers
             {
                 if (!ProjetosExist(projetos.ProjetoId))
                 {
-                    return View("DeleteInsert");
+                    return View("DeleteInsert", projetos);
                 }
                 else
                 {
@@ -136,7 +169,7 @@ namespace IPG_v2._0.Controllers
                 return NotFound();
             }
 
-            var produto = await _db.Projetos
+            var produto = await _db.Projetos.Include(p => p.Categoria)
                 .SingleOrDefaultAsync(m => m.ProjetoId == id);
             if (produto == null)
             {

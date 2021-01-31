@@ -17,11 +17,15 @@ namespace IPG_v2._0.Controllers
         {
             _logger = logger;
         }
-
+        public IActionResult Resume()
+        {
+            return View();
+        }
         public IActionResult Index()
         {
             return View();
         }
+        
 
         public IActionResult Privacy()
         {
