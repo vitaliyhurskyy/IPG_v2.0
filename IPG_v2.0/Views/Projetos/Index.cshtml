@@ -36,6 +36,9 @@ else
         <thead>
             <tr>
                 <th>
+                    Fotografia
+                </th>
+                <th>
                     @Html.DisplayNameFor(model => model.Projetos[0].Nome)
                 </th>
                 <th>
@@ -50,22 +53,28 @@ else
         <tbody>
             @foreach (var projetos in Model.Projetos)
             {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => projetos.Nome)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => projetos.Categoria.Nome)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => projetos.Descricao)
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@projetos.ProjetoId" class="btn btn-warning">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@projetos.ProjetoId" class="btn btn-info">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@projetos.ProjetoId" class="btn btn-danger">Delete</a>
-                    </td>
-                </tr>
+            <tr>
+                <td style="width:150px;">
+                    @if (projetos.Foto != null)
+                    {
+                        <img src="data:image/jpeg;base64, @Convert.ToBase64String(projetos.Foto)" class="img-fluid" />
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => projetos.Nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => projetos.Categoria.Nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => projetos.Descricao)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@projetos.ProjetoId" class="btn btn-warning">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@projetos.ProjetoId" class="btn btn-info">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@projetos.ProjetoId" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
             }
         </tbody>
     </table>

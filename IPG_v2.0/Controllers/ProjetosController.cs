@@ -125,7 +125,7 @@ namespace IPG_v2._0.Controllers
         // POST: Produtos/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProjetoId,Nome,Descricao,Foto,CategoriaId")] Projetos projetos, IFormFile ficheiroFoto)
+        public async Task<IActionResult> Edit(int id, [Bind("ProjetoId,Nome,Descricao,CategoriaId,Foto")] Projetos projetos, IFormFile ficheiroFoto)
         {
             if (id != projetos.ProjetoId)
             {
