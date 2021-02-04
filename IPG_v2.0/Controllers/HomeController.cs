@@ -1,4 +1,5 @@
-﻿using IPG_v2._0.Models;
+﻿using IPG_v2._0.Data;
+using IPG_v2._0.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -17,6 +18,7 @@ namespace IPG_v2._0.Controllers
         {
             _logger = logger;
         }
+        
         public IActionResult Resume()
         {
             return View();
@@ -25,7 +27,18 @@ namespace IPG_v2._0.Controllers
         {
             return View();
         }
-        
+
+        public IActionResult AboutMe()
+        {
+            return View();
+        }
+
+        public IActionResult Contact()
+        {
+            return View();
+        }
+
+       
 
         public IActionResult Privacy()
         {

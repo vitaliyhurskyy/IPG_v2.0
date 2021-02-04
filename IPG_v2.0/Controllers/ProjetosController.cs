@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
 namespace IPG_v2._0.Controllers
 {
@@ -22,6 +23,7 @@ namespace IPG_v2._0.Controllers
         }
 
         // GET: Projetos
+        [Authorize]
         public async Task<IActionResult> Index(string nomePesquisar, int pagina = 1)
         {
             Paginacao paginacao = new Paginacao
@@ -48,6 +50,7 @@ namespace IPG_v2._0.Controllers
         }
 
         // GET: Projetos/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -66,6 +69,7 @@ namespace IPG_v2._0.Controllers
         }
 
         // GET: Projetos/Create
+        [Authorize]
         public IActionResult Create()
         {
             ViewData["CategoriaId"] = new SelectList(_db.Categorias, "CategoriaId", "Nome");
@@ -75,6 +79,7 @@ namespace IPG_v2._0.Controllers
         // POST: Projetos/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create([Bind("ProdutoId,Nome,Descricao,CategoriaId")] Projetos projetos, IFormFile ficheiroFoto)
         {
             if (!ModelState.IsValid)
@@ -105,6 +110,7 @@ namespace IPG_v2._0.Controllers
         }
 
         // GET: Projetos/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -122,9 +128,10 @@ namespace IPG_v2._0.Controllers
             return View(projetos);
         }
 
-        // POST: Produtos/Edit/5
+        // POST: Projetos/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(int id, [Bind("ProjetoId,Nome,Descricao,CategoriaId,Foto")] Projetos projetos, IFormFile ficheiroFoto)
         {
             if (id != projetos.ProjetoId)
@@ -158,10 +165,11 @@ namespace IPG_v2._0.Controllers
             ViewBag.Mensagem = "Projeto alterado com sucesso";
             return View("Success");
         }
-           
-        
+
+
 
         // GET: Projetos/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -169,20 +177,21 @@ namespace IPG_v2._0.Controllers
                 return NotFound();
             }
 
-            var produto = await _db.Projetos.Include(p => p.Categoria)
-                .SingleOrDefaultAsync(m => m.ProjetoId == id);
-            if (produto == null)
+            var projetos = await _db.Projetos.Include(p => p.Categoria)
+                .FirstOrDefaultAsync(m => m.ProjetoId == id);
+            if (projetos == null)
             {
                 ViewBag.Mensagem = "O produto que estava a tentar apagar foi eliminado por outra pessoa.";
                 return View("Success");
             }
 
-            return View();
+            return View(projetos);
         }
 
         // POST: Projetos/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var projetos = await _db.Projetos.FindAsync(id);

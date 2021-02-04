@@ -1,15 +1,18 @@
 ﻿
 @{ ViewData["Title"] = "Projeto inexistente"; }
+<div class="container">
+    <section class="ftco-section">
+        <div class="card text-white bg-warning mb-3">
+            <div class="card-body">
+                <h5 class="card-title">@ViewBag.Title</h5>
+                <p class="card-text">O projeto que selecionou já não existe. Possivelmente alguém eliminou o mesmo.</p>
 
-<div class="card text-white bg-warning mb-3">
-    <div class="card-body">
-        <h5 class="card-title">@ViewBag.Title</h5>
-        <p class="card-text">O projeto que selecionou já não existe. Possivelmente alguém eliminou o mesmo.</p>
-
-        <div>
-            <a class="btn btn-primary" asp-action="Index">
-                Ver lista de produtos
-            </a>
+                <div>
+                    <a class="btn btn-primary" asp-action="Index">
+                        Ver lista de produtos
+                    </a>
+                </div>
+            </div>
         </div>
+        </section>
     </div>
-</div>

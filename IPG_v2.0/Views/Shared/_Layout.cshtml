@@ -6,34 +6,45 @@
     <title>@ViewData["Title"] - IPG_v2._0</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
-    
+    <link rel="stylesheet" href="~/css/stylecontact.css">
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="~/favicon.ico" />
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js" crossorigin="anonymous"></script>
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">IPG_v2._0</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <partial name="_LoginPartial" />
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Projetos" asp-action="Index">Portfolio</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Categoria" asp-action="Index">Categorias</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Resume">Resume</a>
-                        </li>
+        <nav class="navbar navbar-dark bg-dark navbar-expand-lg ">
+            <a class="navbar-brand"  asp-area="" asp-controller="Home" asp-action="Index"><img style="max-width: 50px;" src="~/Images/logo_site.png"/></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item ">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="AboutMe">Sobre</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Resume">Resume</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Portfolio" asp-action="Index">Portfolio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Contact">Contacto</a>
+                    </li>
                     </ul>
-                </div>
+                <partial name="_LoginPartial" />
             </div>
         </nav>
     </header>
@@ -43,14 +54,37 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="border-top text-muted" style="background-color: #343a40;">
         <div class="container">
-            &copy; 2021 - IPG_v2._0 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <div class="row">
+                <!--Footer Text-->
+                <div class="col-lg-12 mb-5 mb-lg-0">
+                    <p style="font-size: 150%; text-align: center;">
+                        <strong>Deixe-me construir o Website que voce precisa.</strong>
+                    </p>
+                </div>
+                <!-- Footer Social Icons-->
+                <div class="col-lg-12 mb-5 mb-lg-0 text-center ">
+                    <a class="btn btn-outline-light btn-social mx-1 text-center" href="https://www.facebook.com/people/Vitaliy-Hurskyy/100011268668910"><i class="fab fa-fw fa-facebook-f"></i></a>
+                    <a class="btn btn-outline-light btn-social mx-1 text-center" href="https://www.instagram.com/vitaliyhurskyy/"><i class="fab fa-fw fa-instagram"></i></a>
+                    <a class="btn btn-outline-light btn-social mx-1 text-center" href="https://www.linkedin.com/in/vitaliyhurskyy/"><i class="fab fa-fw fa-linkedin-in"></i></a>
+                    <a class="btn btn-outline-light btn-social mx-1 text-center" href="https://www.github.com/vitaliyhurskyy"><i class="fab fa-fw fa-github"></i></a>
+                </div>
+                <!-- Footer CopyRight-->
+                <div class="col-lg-12 text-center ">
+                    <p class="copyright" style="color:white !important;">2021 © Vitaliy Hurskyy</p>
+                </div>
+            </div>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~js/jquery.min.js"></script>
+    <script src="~js/popper.js"></script>
+    <script src="~js/bootstrap.min.js"></script>
+    <script src="~js/jquery.validate.min.js"></script>
+    <script src="~js/main.js"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

@@ -1,0 +1,112 @@
+﻿@model ListaProjetosViewModel
+
+@{
+    ViewData["Title"] = "Projetos";
+}
+
+<h1 class="text-white">Portfolio</h1>
+
+
+<div class="container">
+    <section class="ftco-section">
+        <div class="card border-info mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Pesquisa</h5>
+                <form asp-action="Index" method="get">
+                    <div class="form-group">
+                        <label for="nomePesquisar" class="control-label ">Nome</label>
+                        <input name="nomePesquisar" class="form-control border border-dark " type="search" value="@Model.NomePesquisar" />
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Pesquisar" class="btn btn-primary" />
+                        <a asp-action="Index" class="btn btn-secondary">Limpar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        @if (Model.Projetos.Count() == 0)
+        {
+            <p>Não existem projetos para mostrar.</p>
+        }
+        else
+        {
+            <table class="table table-dark">
+                <thead>
+                    <tr>
+                        <th>
+                            Fotografia
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Projetos[0].Nome)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Projetos[0].CategoriaId)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Projetos[0].Descricao)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var projetos in Model.Projetos)
+                    {
+                        <tr>
+                            <td style="max-width:150px; max-height:150px;">
+                                @if (projetos.Foto != null)
+                                {
+                                    <img src="data:image/jpeg;base64, @Convert.ToBase64String(projetos.Foto)" class="img-fluid" />
+                                }
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => projetos.Nome)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => projetos.Categoria.Nome)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => projetos.Descricao)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <nav>
+                <ul class="pagination">
+                    @{
+                        int paginaInicial = Model.Paginacao.PaginaAtual - Paginacao.NUMERO_PAGINAS_MOSTRAR_ANTES_DEPOIS;
+                        //int paginaInicial = Model.Paginacao.PaginaAtual - Paginacao.NUMERO_PAGINAS_MOSTRAR_ANTES_DEPOIS / 2;
+                        if (paginaInicial < 1)
+                        {
+                            paginaInicial = 1;
+                        }
+
+                        int paginaFinal = Model.Paginacao.PaginaAtual + Paginacao.NUMERO_PAGINAS_MOSTRAR_ANTES_DEPOIS;
+                        //int paginaFinal = paginaInicial + Paginacao.NUMERO_PAGINAS_MOSTRAR_ANTES_DEPOIS - 1;
+                        if (paginaFinal > Model.Paginacao.TotalPaginas)
+                        {
+                            paginaFinal = Model.Paginacao.TotalPaginas;
+                        }
+                    }
+
+                    <li class="page-item @(Model.Paginacao.PaginaAtual == 1 ? "disabled" : "")">
+                        <a class="page-link" asp-action="Index" asp-route-pagina="1" asp-route-nomePesquisar="@Model.NomePesquisar">Primeiro</a>
+                    </li>
+
+                    @for (int i = paginaInicial; i <= paginaFinal; i++)
+                    {
+                        <li class="page-item @(Model.Paginacao.PaginaAtual == i ? "active" : "")">
+                            <a class="page-link" asp-action="Index" asp-route-pagina="@i" asp-route-nomePesquisar="@Model.NomePesquisar">@i</a>
+                        </li>
+                    }
+
+                    <li class="page-item @(Model.Paginacao.PaginaAtual == Model.Paginacao.TotalPaginas  ? "disabled" : "")">
+                        <a class="page-link" asp-action="Index" asp-route-pagina="@Model.Paginacao.TotalPaginas" asp-route-nomePesquisar="@Model.NomePesquisar">Último</a>
+                    </li>
+                </ul>
+            </nav>
+        }
+        </section>
+    </div>

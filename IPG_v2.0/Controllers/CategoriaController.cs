@@ -21,12 +21,14 @@ namespace IPG_v2._0.Controllers
         }
 
         // GET: Categorias
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Categorias.ToListAsync());
         }
 
         // GET: Categorias/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -45,6 +47,7 @@ namespace IPG_v2._0.Controllers
         }
 
         // GET: Categorias/Create
+        [Authorize]
         public IActionResult Create()
         {
             return View();
@@ -54,6 +57,7 @@ namespace IPG_v2._0.Controllers
  
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create([Bind("CategoriaId,Nome")] Categorias categoria)
         {
             if (ModelState.IsValid)
@@ -66,6 +70,7 @@ namespace IPG_v2._0.Controllers
         }
 
         // GET: Categorias/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -85,6 +90,7 @@ namespace IPG_v2._0.Controllers
       
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(int id, [Bind("CategoriaId,Nome")] Categorias categoria)
         {
             if (id != categoria.CategoriaId)
@@ -116,6 +122,7 @@ namespace IPG_v2._0.Controllers
         }
 
         // GET: Categorias/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -136,6 +143,7 @@ namespace IPG_v2._0.Controllers
         // POST: Categorias/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var categoria = await _context.Categorias.FindAsync(id);

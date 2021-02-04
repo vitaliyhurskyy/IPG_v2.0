@@ -17,7 +17,7 @@ namespace IPG_v2._0.Models
         public Categorias Categoria { get; set; }
 
         [Required(ErrorMessage = "Deve preencher o nome.")]
-        [StringLength(20, MinimumLength = 4, ErrorMessage = "O nome deve ter pelo menos 4 caracteres e não deve exceder os 20 caracteres.")]
+        [StringLength(50, MinimumLength = 4, ErrorMessage = "O nome deve ter pelo menos 4 caracteres e não deve exceder os 20 caracteres.")]
         public string Nome { get; set; }
         
         [Required(ErrorMessage = "Deve preencher o Descrição.")]
